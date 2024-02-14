@@ -11,13 +11,18 @@ import web.restapiproject.modules.member.entity.Member;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring"
+        , unmappedTargetPolicy = ReportingPolicy.IGNORE
+//        , uses ={ BoardMapper.class}
+)
 public interface BoardMapper {
     BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
 
     public Board requestToEntity(BoardSearchRequest boardSearchRequest);
 
-    public BoardSearchResponse entityToResponse(Board board);
-    public List<BoardSearchResponse> entityToListResponse(Board board);
+
+    public BoardSearchResponse entityToListResponse(Board board);
+
+    public List<BoardSearchResponse> entityToListResponse(List<Board> board);
 
 }

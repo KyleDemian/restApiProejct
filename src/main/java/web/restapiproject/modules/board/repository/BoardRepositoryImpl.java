@@ -52,13 +52,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         titleEq(boardSearchRequest.getSearchKeyword())
                 );
 
-        List<BoardSearchResponse> response = BoardMapper.INSTANCE.entityToListResponse((Board) contents);
-
-//        BoardSearchRequest board = BoardMapper.INSTANCE.toRequest();
-//        contents.dto
+        List<BoardSearchResponse> response = BoardMapper.INSTANCE.entityToListResponse(contents);
 
         // 반환 타입이 Board -> BoardSearchRequest 즉, MapStruct 를 사용해야함. 여기서!
         return PageableExecutionUtils.getPage(response, pageable, boardCount::fetchCount);
-        return null;
     }
 }
