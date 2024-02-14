@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class MemberCreate {
+public class MemberCreateRequest {
 
     @NotBlank(message = "아이디는 필수 값입니다.")
     @Length(min = 2, max = 20)

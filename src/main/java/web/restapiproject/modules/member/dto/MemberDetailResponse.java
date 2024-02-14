@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
-public class MemberDetail {
+public class MemberDetailResponse {
 
     private String id;
     private String loginId;

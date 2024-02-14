@@ -1,4 +1,4 @@
-package web.restapiproject.enums;
+package web.restapiproject.common.study;
 
 public class Person {
 
