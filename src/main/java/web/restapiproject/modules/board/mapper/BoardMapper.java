@@ -15,12 +15,13 @@ import java.util.List;
         , unmappedTargetPolicy = ReportingPolicy.IGNORE
 //        , uses ={ BoardMapper.class}
 )
+// https://jiwondev.tistory.com/250
 public interface BoardMapper {
     BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
 
     public Board requestToEntity(BoardSearchRequest boardSearchRequest);
 
-
+    // 객체를 리스트 형태로 담기 위해서는 동일한게 1개 더 있어야 함.
     public BoardSearchResponse entityToListResponse(Board board);
 
     public List<BoardSearchResponse> entityToListResponse(List<Board> board);
