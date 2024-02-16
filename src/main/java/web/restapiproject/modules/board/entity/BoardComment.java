@@ -1,11 +1,9 @@
 package web.restapiproject.modules.board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import web.restapiproject.common.entity.BaseEntity;
+import web.restapiproject.modules.member.entity.Member;
 
 @Entity
 @Getter @Setter @Builder
@@ -13,8 +11,14 @@ import web.restapiproject.common.entity.BaseEntity;
 public class BoardComment extends BaseEntity {
 
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String comment;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Board board;
+
 }

@@ -2,6 +2,7 @@ package web.restapiproject.modules.member.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,11 +33,11 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@ModelAttribute MemberCreateRequest memberCreateRequest, Errors errors) throws Exception {
+    public ResponseEntity signUp(@Valid MemberCreateRequest memberCreateRequest, Errors errors) throws Exception {
         if (errors.hasErrors()) {
-
+            throw new IllegalArgumentException("데이터가 일치하지 않음.");
         }
-        memberService.signUp(memberCreateRequest);
+        Long userId = memberService.signUp(memberCreateRequest);
 
         return ResponseEntity.ok("");
     }

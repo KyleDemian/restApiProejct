@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +20,8 @@ import java.net.URI;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class BoardController {
+
+    // https://adjh54.tistory.com/151 스웨거를 통한 문서 정리
 
     private final BoardService boardService;
 
@@ -37,7 +40,7 @@ public class BoardController {
 
     // 글 등록
     @PostMapping("/boards")
-    public ResponseEntity<Void> createBoard(@ModelAttribute @Valid BoardCreateRequest boardCreateRequest, Errors errors) {
+    public ResponseEntity<Void> createBoard(@ModelAttribute @Valid BoardCreateRequest boardCreateRequest, Errors errors , @AuthenticationPrincipal User userInfo) {
         if (errors.hasErrors()) {
             throw new IllegalArgumentException("데이터가 잘못 들어왔음");
         }

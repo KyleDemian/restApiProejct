@@ -30,15 +30,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         return StringUtils.hasText(title) ? board.title.eq(title) : null;
     }
 
+
     @Override
     public Page<BoardSearchResponse> getBoardList(BoardSearchRequest boardSearchRequest, Pageable pageable) {
         List<Board> contents = queryFactory
             .select(Projections.constructor(Board.class,
-                    board.id,
-                    board.title,
-                    board.contents,
-                    board.createdAt,
-                    board.createdBy
+                    board.id, board.title, board.contents, board.createdAt, board.createdBy
             ))
             .from(board)
             .where(
@@ -57,8 +54,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
         List<BoardSearchResponse> response = BoardMapper.INSTANCE.entityToListResponse(contents);
 
-        // 사실 MapStruct를 사용하는 순간부터 1개의 DTO로 작업을 하며,
-        // 사용할 파라미터, 무시할 파라미터 등을 설정해서 만들 수 있기때문에 DTO를 여러개를 만들 필요는 없어보임.
+        // 사실 MapStruct를 사용하는 순간부터 1개의 DTO로 작업을 하며, 사용할 파라미터, 무시할 파라미터 등을 설정해서 만들 수 있기때문에 DTO를 여러개를 만들 필요는 없어보임.
         // 반환 타입이 Board -> BoardSearchRequest 즉, MapStruct 를 사용해야함. 여기서!
         return PageableExecutionUtils.getPage(response, pageable, boardCount::fetchCount);
     }

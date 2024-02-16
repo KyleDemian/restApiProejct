@@ -4,5 +4,5 @@ import web.restapiproject.modules.member.dto.MemberCreateRequest;
 
 @Service
 public interface MemberService {
-    void signUp(MemberCreateRequest memberCreateRequest);
+    Long signUp(MemberCreateRequest memberCreateRequest);
 }

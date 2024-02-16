@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import web.restapiproject.common.entity.BaseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -18,4 +21,7 @@ public class Board extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
+//    @OneToMany
+//    @JoinColumn(name = "comment_id")
+//    private List<BoardComment> boardCommentList = new ArrayList<>();
 }
