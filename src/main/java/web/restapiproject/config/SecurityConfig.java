@@ -42,17 +42,6 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
-//                .formLogin(login -> login
-//                        .loginPage("/member/sign-in")
-//                        .usernameParameter("memberId")
-//                        .passwordParameter("password")
-//                        .loginProcessingUrl("/member/login") // basic: /login
-//                        .defaultSuccessUrl("/board/list", true)
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutSuccessUrl("/member/sign-in")
-//                )
         ;
 
         return http.build();
