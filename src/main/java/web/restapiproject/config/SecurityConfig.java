@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -52,6 +54,7 @@ public class SecurityConfig {
         return (web) ->
                 web.ignoring()
                         .requestMatchers("/resources/**")
+                        .requestMatchers("/static/**")
                 ;
     }
 
@@ -68,9 +71,4 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-//    public PasswordEncoder passwordEncoder() {    // 순환참조 오류가 발생하여 정적메서드로 변경
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

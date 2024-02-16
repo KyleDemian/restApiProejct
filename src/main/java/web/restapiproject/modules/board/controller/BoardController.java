@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import web.restapiproject.modules.board.dto.*;
 import web.restapiproject.modules.board.service.BoardService;
+import web.restapiproject.modules.member.entity.Member;
 
 import java.net.URI;
 
@@ -39,6 +41,7 @@ public class BoardController {
         if (errors.hasErrors()) {
             throw new IllegalArgumentException("데이터가 잘못 들어왔음");
         }
+
         Long createBoardId = boardService.createBoard(boardCreateRequest);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

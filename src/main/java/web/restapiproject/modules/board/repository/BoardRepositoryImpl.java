@@ -34,7 +34,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     public Page<BoardSearchResponse> getBoardList(BoardSearchRequest boardSearchRequest, Pageable pageable) {
         List<Board> contents = queryFactory
             .select(Projections.constructor(Board.class,
-                    board.id, board.title, board.contents, board.createdAt, board.createdBy
+                    board.id,
+                    board.title,
+                    board.contents,
+                    board.createdAt,
+                    board.createdBy
             ))
             .from(board)
             .where(
