@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter @Builder
+@Getter
+@Builder
 @NoArgsConstructor @AllArgsConstructor
 public class Board extends BaseEntity {
 
@@ -23,6 +24,7 @@ public class Board extends BaseEntity {
     private String contents;
 
     // mappedBy 가 있을경우 @JoinColumn(name = "comment_id") 사용 불가.
+    @Builder.Default
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<BoardComment> boardCommentList = new ArrayList<>();
 }

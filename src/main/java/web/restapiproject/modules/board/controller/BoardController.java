@@ -2,19 +2,23 @@ package web.restapiproject.modules.board.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import web.restapiproject.modules.board.dto.*;
 import web.restapiproject.modules.board.service.BoardService;
+import web.restapiproject.modules.member.entity.Member;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -40,10 +44,17 @@ public class BoardController {
     // BindingResult: Errors를 확장하며, DataBinder가 고려해야 할 특정 컨텍스트 정보(예: 요구되는 필드, 특정 필드에 대한 PropertyEditor 등)를 추가로 제공합니다.
     // 또한, 다른 Spring 모듈과 통합하는데 필요한 메소드(예: ModelAndView를 위한 메소드 등)도 추가로 제공
     @PostMapping("/boards")
-    public ResponseEntity<Void> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest
+    public ResponseEntity<Void> createBoard(
+            // 로그인 했을경우만 글쓸 수 있도록 변경 해야함.
+//            @AuthenticationPrincipal Member member,
+                                            @RequestBody @Valid BoardCreateRequest boardCreateRequest
             , BindingResult bindingResult) {
+
+//        log.info("멤버 객체", member);
+
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("데이터가 잘못 들어왔음");
+            String errMsg = bindingResult.getFieldError().getDefaultMessage();
+            throw new IllegalArgumentException("유효성 검사 오류: " + errMsg);
         }
 
         Long createBoardId = boardService.createBoard(boardCreateRequest);
@@ -81,7 +92,7 @@ public class BoardController {
      */
     @PostMapping("/boards/{id}/comments")
     public ResponseEntity<Void> createBoardComment(@PathVariable Long id,
-//                                             @AuthenticationPrincipal Member member,
+
                                                    @RequestBody @Valid BoardCommentCreateRequest boardCommentCreateRequest,
                                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

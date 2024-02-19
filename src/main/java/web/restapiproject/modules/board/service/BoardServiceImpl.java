@@ -40,7 +40,7 @@ public class BoardServiceImpl implements BoardService{
     public Long createBoard(BoardCreateRequest boardCreateRequest) {
 //        Long boardId = boardRepository.save(BoardMapper.INSTANCE.createRequestToEntity(boardCreateRequest)).getId();
         Board board = BoardMapper.INSTANCE.createRequestToEntity(boardCreateRequest);
-        board.setCreatedBy("USER");
+//        board.setCreatedBy("USER");
         Long boardId = boardRepository.save(board).getId();
         return boardId;
     }
@@ -48,8 +48,9 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void modifyBoard(Long id, BoardModifyRequest boardModifyRequest) {
         Board board = BoardMapper.INSTANCE.modifyRequestToEntity(boardModifyRequest);
-        board.setId(id);
-        board.setModifiedBy("USER2");
+        board = board.builder()
+                .id(id)
+                .build();
         boardRepository.save(board);
     }
 

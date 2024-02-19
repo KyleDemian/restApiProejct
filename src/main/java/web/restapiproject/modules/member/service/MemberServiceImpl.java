@@ -26,10 +26,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     public Long signUp(MemberCreateRequest memberCreateRequest) {
+        memberCreateRequest.setPassword(passwordEncoder.encode(memberCreateRequest.getPassword()));
         Member member = MemberMapper.INSTANCE.createRequestToEntity(memberCreateRequest);
-        member.builder()
-                .password(passwordEncoder.encode(member.getPassword()))
-                .build();
 
         return memberRepository.save(member).getId();
     }
