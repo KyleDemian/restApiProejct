@@ -15,5 +15,9 @@ public interface BoardService {
 
     void deleteBoard(Long id);
 
-    Long createBoardComments(Long id, BoardCommentRequest boardCommentRequest);
+    Long createBoardComments(Long id, BoardCommentCreateRequest boardCommentCreateRequest);
+
+    void modifyBoardComment(Long boardId, Long commentId, BoardCommentCreateRequest boardCommentCreateRequest);
+
+    void deleteBoardComment(Long boardId, Long commentId);
 }

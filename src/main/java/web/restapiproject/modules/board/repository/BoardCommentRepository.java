@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import web.restapiproject.modules.board.entity.BoardComment;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
+    void deleteById(Long commentId);
 }

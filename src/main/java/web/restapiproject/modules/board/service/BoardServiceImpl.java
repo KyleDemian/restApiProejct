@@ -14,8 +14,6 @@ import web.restapiproject.modules.board.mapper.BoardMapper;
 import web.restapiproject.modules.board.repository.BoardCommentRepository;
 import web.restapiproject.modules.board.repository.BoardRepository;
 
-import java.util.List;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -61,26 +59,32 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public Long createBoardComments(Long id, BoardCommentRequest boardCommentRequest) {
+    public Long createBoardComments(Long id, BoardCommentCreateRequest boardCommentCreateRequest) {
         Board board = boardRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재 하지 않음"));
 
-        BoardComment boardComment = BoardCommentMapper.INSTANCE.createRequestToEntity(boardCommentRequest);
+        BoardComment boardComment = BoardCommentMapper.INSTANCE.createRequestToEntity(boardCommentCreateRequest);
         boardComment.setBoard(board);
-        BoardComment saveBoardComment =  boardCommentRepository.save(boardComment);
 
-        return saveBoardComment.getId();
+        return boardCommentRepository.save(boardComment).getId();
     }
 
+    @Override
+    public void modifyBoardComment(Long boardId, Long commentId, BoardCommentCreateRequest boardCommentCreateRequest) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재 하지 않음"));
+        BoardComment boardComment = boardCommentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 게시판 글 존재 하지 않음"));
+        boardComment.update(boardCommentCreateRequest.getComment());
+        boardCommentRepository.save(boardComment);
+    }
 
+    @Override
+    public void deleteBoardComment(Long boardId, Long commentId) {
+        if (!boardRepository.existsById(boardId)) {
+            throw new IllegalArgumentException("게시글이 존재하지 않음");
+        }
+//        boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재 하지 않음"));
 
+        boardCommentRepository.deleteById(commentId);
+    }
 
-
-
-
-
-
-
-
-    
 }

@@ -6,7 +6,7 @@ import lombok.*;
 @Getter @Setter
 @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class BoardCommentRequest {
+public class BoardCommentCreateRequest {
 
     private Long id;
 

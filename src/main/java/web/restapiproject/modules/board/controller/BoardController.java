@@ -5,15 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import web.restapiproject.modules.board.dto.*;
 import web.restapiproject.modules.board.service.BoardService;
-import web.restapiproject.modules.member.entity.Member;
 
 import java.net.URI;
 
@@ -35,7 +31,7 @@ public class BoardController {
 
     // 상세 조회
     @GetMapping("/boards/{id}")
-    public ResponseEntity<BoardDetailResponse> getBoardDetail(@PathVariable("id") Long id){
+    public ResponseEntity<BoardDetailResponse> getBoardDetail(@PathVariable("id") Long id) {
         return ResponseEntity.ok(boardService.getBoardDetail(id));
     }
 
@@ -86,20 +82,36 @@ public class BoardController {
     @PostMapping("/boards/{id}/comments")
     public ResponseEntity<Void> createBoardComment(@PathVariable Long id,
 //                                             @AuthenticationPrincipal Member member,
-                                             @RequestBody @Valid BoardCommentRequest boardCommentRequest,
-                                             BindingResult bindingResult) {
+                                                   @RequestBody @Valid BoardCommentCreateRequest boardCommentCreateRequest,
+                                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("데이터 확인 필요.");
         }
 
 //        Long createBoardId = boardService.createBoardComments(member, id ,boardCommentRequest);
-        Long createBoardId = boardService.createBoardComments(id ,boardCommentRequest);
+        Long createBoardId = boardService.createBoardComments(id, boardCommentCreateRequest);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(createBoardId)
-        .toUri();
+                .path("/{id}")
+                .buildAndExpand(createBoardId)
+                .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/boards/{boardId}/comments/{commentId}")
+    public ResponseEntity<Long> modifyBoardComment(@PathVariable Long boardId, @PathVariable Long commentId,
+                                                   @RequestBody @Valid BoardCommentCreateRequest boardCommentCreateRequest,
+                                                   BindingResult bindingResult) {
+        boardService.modifyBoardComment(boardId, commentId, boardCommentCreateRequest);
+
+        return ResponseEntity.ok(commentId);
+    }
+
+    @DeleteMapping("/boards/{boardId}/comments/{commentId}")
+    public ResponseEntity<Long> deleteBoardComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+        boardService.deleteBoardComment(boardId, commentId);
+
+        return ResponseEntity.ok(commentId);
     }
 }

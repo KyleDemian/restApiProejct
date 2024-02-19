@@ -21,4 +21,8 @@ public class BoardComment extends BaseEntity {
     @JoinColumn(name = "board_id", insertable = false, updatable = false)
     private Board board;
 
+    public void update(String comment) {
+        this.comment = comment;
+    }
+
 }
