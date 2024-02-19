@@ -13,6 +13,7 @@ import java.util.List;
 public class Board extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long id;
 
     @Column(nullable = false)
@@ -21,7 +22,7 @@ public class Board extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
-//    @OneToMany
-//    @JoinColumn(name = "comment_id")
-//    private List<BoardComment> boardCommentList = new ArrayList<>();
+    // mappedBy 가 있을경우 @JoinColumn(name = "comment_id") 사용 불가.
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<BoardComment> boardCommentList = new ArrayList<>();
 }

@@ -28,9 +28,6 @@ public interface MemberMapper {
         //condition : 맵핑 시 모든 필드들에 대해 공통 함수를 적용할 때 사용 (null 이나 빈 값 체크 시 )
         // → 전체 필드에 적용되므로, 공통일 경우에만 쓸 것.
 
-//        @Mapping(target="email", source="email")
-//        @Mapping(target = "nickname", source = "nickname")
-//        @Mapping(target = "info", ignore = true)
         public Member createRequestToEntity(MemberCreateRequest createRequest);
 
         public Member modifyRequestToEntity(MemberModifyRequest modifyRequest);

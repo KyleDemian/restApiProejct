@@ -8,9 +8,6 @@ import web.restapiproject.enums.Gender;
 @NoArgsConstructor @AllArgsConstructor
 public class MemberDto {
 
-    private Long id;
     private String loginId;
-    private String email;
-    private String nickname;
-    private String info;
+    private String password;
 }

@@ -16,9 +16,11 @@ import java.util.List;
 
 
 @Entity
-@Getter @Setter
+@Getter
+//@Setter
 //@EqualsAndHashCode(of = "id")
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Member extends BaseEntity implements UserDetails {
 
     @Id
@@ -42,6 +44,14 @@ public class Member extends BaseEntity implements UserDetails {
     public Member(String loginId, String password, String auth){
         this.loginId = loginId;
         this.password = password;
+    }
+
+    @Builder
+    public Member(String loginId, String password, String email, String nickname) {
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
     }
 
     // 권한 반환

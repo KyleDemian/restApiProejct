@@ -18,7 +18,7 @@ public class BoardComment extends BaseEntity {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "board_id", insertable = false, updatable = false)
     private Board board;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.restapiproject.modules.member.dto.MemberCreateRequest;
+import web.restapiproject.modules.member.dto.MemberDto;
 import web.restapiproject.modules.member.entity.Member;
 import web.restapiproject.modules.member.mapper.MemberMapper;
 import web.restapiproject.modules.member.repository.MemberRepository;
@@ -26,9 +27,20 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     @Override
     public Long signUp(MemberCreateRequest memberCreateRequest) {
         Member member = MemberMapper.INSTANCE.createRequestToEntity(memberCreateRequest);
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        member.builder()
+                .password(passwordEncoder.encode(member.getPassword()))
+                .build();
 
         return memberRepository.save(member).getId();
+    }
+
+    @Override
+    public boolean authenticateMember(MemberDto memberDto) {
+        Optional<Member> member = memberRepository.findByLoginId(memberDto.getLoginId());
+        if (member.isPresent()) {
+            return passwordEncoder.matches(memberDto.getPassword(), member.get().getPassword());
+        }
+        return false;
     }
 
     @Override
@@ -36,14 +48,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         Optional<Member> findOne = memberRepository.findByLoginId(loginId);
         Member member = findOne.orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
 
-//        return member;
-        return User.builder()
-                .username(member.getLoginId())
-                .password(member.getPassword())
-                .roles("ROLE_USER")
-                .build()
-                ;
-//        return memberRepository.findByLoginId(loginId)
-//                .orElseThrow(() -> new IllegalArgumentException(loginId));
+        return member;
+//        return User.builder()
+//                .username(member.getLoginId())
+//                .password(member.getPassword())
+//                .roles("ROLE_USER")
+//                .build()
+//                ;
     }
 }

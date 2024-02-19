@@ -40,7 +40,7 @@ public class BoardController {
 
     // 글 등록
     @PostMapping("/boards")
-    public ResponseEntity<Void> createBoard(@ModelAttribute @Valid BoardCreateRequest boardCreateRequest, Errors errors , @AuthenticationPrincipal User userInfo) {
+    public ResponseEntity<Void> createBoard(@ModelAttribute @Valid BoardCreateRequest boardCreateRequest, Errors errors) {
         if (errors.hasErrors()) {
             throw new IllegalArgumentException("데이터가 잘못 들어왔음");
         }
