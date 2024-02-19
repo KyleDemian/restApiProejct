@@ -79,4 +79,27 @@ public class BoardController {
         boardService.deleteBoard(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * 댓글 작성 영역 추가
+     */
+    @PostMapping("/boards/{id}/comments")
+    public ResponseEntity<Void> createBoardComment(@PathVariable Long id,
+//                                             @AuthenticationPrincipal Member member,
+                                             @RequestBody @Valid BoardCommentRequest boardCommentRequest,
+                                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("데이터 확인 필요.");
+        }
+
+//        Long createBoardId = boardService.createBoardComments(member, id ,boardCommentRequest);
+        Long createBoardId = boardService.createBoardComments(id ,boardCommentRequest);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(createBoardId)
+        .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
 }

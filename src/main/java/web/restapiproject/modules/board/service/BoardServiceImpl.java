@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.restapiproject.modules.board.dto.*;
 import web.restapiproject.modules.board.entity.Board;
+import web.restapiproject.modules.board.entity.BoardComment;
+import web.restapiproject.modules.board.mapper.BoardCommentMapper;
 import web.restapiproject.modules.board.mapper.BoardMapper;
+import web.restapiproject.modules.board.repository.BoardCommentRepository;
 import web.restapiproject.modules.board.repository.BoardRepository;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
+    private final BoardCommentRepository boardCommentRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,4 +59,28 @@ public class BoardServiceImpl implements BoardService{
     public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
     }
+
+    @Override
+    public Long createBoardComments(Long id, BoardCommentRequest boardCommentRequest) {
+        Board board = boardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시글이 존재 하지 않음"));
+
+        BoardComment boardComment = BoardCommentMapper.INSTANCE.createRequestToEntity(boardCommentRequest);
+        boardComment.setBoard(board);
+        BoardComment saveBoardComment =  boardCommentRepository.save(boardComment);
+
+        return saveBoardComment.getId();
+    }
+
+
+
+
+
+
+
+
+
+
+
+    
 }
