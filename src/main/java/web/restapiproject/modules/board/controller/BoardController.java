@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,9 +40,13 @@ public class BoardController {
     }
 
     // 글 등록
+    // Errors: 객체의 상태에 대한 정보를 확인하고, 에러 메시지를 관리하는 방법을 제공
+    // BindingResult: Errors를 확장하며, DataBinder가 고려해야 할 특정 컨텍스트 정보(예: 요구되는 필드, 특정 필드에 대한 PropertyEditor 등)를 추가로 제공합니다.
+    // 또한, 다른 Spring 모듈과 통합하는데 필요한 메소드(예: ModelAndView를 위한 메소드 등)도 추가로 제공
     @PostMapping("/boards")
-    public ResponseEntity<Void> createBoard(@ModelAttribute @Valid BoardCreateRequest boardCreateRequest, Errors errors) {
-        if (errors.hasErrors()) {
+    public ResponseEntity<Void> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest
+            , BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("데이터가 잘못 들어왔음");
         }
 
@@ -58,9 +63,9 @@ public class BoardController {
     // 글 수정
     @PutMapping("/boards/{id}")
     public ResponseEntity<Void> modifyBoard(@PathVariable("id") Long id,
-                                            @ModelAttribute @Valid BoardModifyRequest boardModifyRequest,
-                                            Errors errors) {
-        if (errors.hasErrors()) {
+                                            @RequestBody @Valid BoardModifyRequest boardModifyRequest,
+                                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("데이터가 잘못 들어왔음");
         }
         boardService.modifyBoard(id, boardModifyRequest);

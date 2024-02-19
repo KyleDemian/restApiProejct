@@ -38,8 +38,8 @@ public class MemberController {
 
     // 회원 가입
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@Valid MemberCreateRequest memberCreateRequest, Errors errors) throws Exception {
-        if (errors.hasErrors()) {
+    public ResponseEntity signUp(@Valid MemberCreateRequest memberCreateRequest, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("데이터가 일치하지 않음.");
         }
         Long userId = memberService.signUp(memberCreateRequest);
