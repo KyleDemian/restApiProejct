@@ -6,12 +6,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import web.restapiproject.config.JwtAuthenticationResponse;
+import web.restapiproject.config.JwtTokenProvider;
 import web.restapiproject.modules.member.dto.MemberCreateRequest;
 import web.restapiproject.modules.member.dto.MemberDto;
 import web.restapiproject.modules.member.service.MemberService;
@@ -21,17 +24,31 @@ import web.restapiproject.modules.member.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+//    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<String> processLogin(@Valid @RequestBody MemberDto memberDto, BindingResult bindingResult) {
+    public ResponseEntity<?> processLogin(@Valid @RequestBody MemberDto memberDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid data");
         }
         boolean isAuthenticated = memberService.authenticateMember(memberDto);
 
         if (isAuthenticated) {
-            return ResponseEntity.ok(HttpStatus.OK.toString());
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            memberDto.getLoginId(),
+//                            memberDto.getPassword()
+//                    )
+//            );
+
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//            String jwt = tokenProvider.generateToken(authentication);
+//            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+            return ResponseEntity.ok("ok");
         } else {
+            // @ControllerAdvice를 사용해 글로벌 예외 처리
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid credentials");
         }
     }
