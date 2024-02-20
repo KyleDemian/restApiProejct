@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import web.restapiproject.common.entity.BaseEntity;
 import web.restapiproject.enums.Gender;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,6 +59,16 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
+
+//        Collection<GrantedAuthority> collect = new ArrayList<>();
+//        collect.add(new GrantedAuthority() {
+//
+//            @Override
+//            public String getAuthority() {
+//                return user.getRole().getValue();
+//            }
+//        });
+//        return collect;
     }
 
     // 사용자 고유 ID 반환

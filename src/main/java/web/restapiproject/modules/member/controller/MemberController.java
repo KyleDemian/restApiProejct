@@ -44,7 +44,7 @@ public class MemberController {
         }
         Long userId = memberService.signUp(memberCreateRequest);
 
-        return ResponseEntity.ok("회원 가입 완료 ::: " + userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("사용자 아디 " + userId);
     }
 
     // 로그 아웃
@@ -52,6 +52,6 @@ public class MemberController {
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response,
                 SecurityContextHolder.getContext().getAuthentication());
-        return ResponseEntity.ok("Logout 완료");
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

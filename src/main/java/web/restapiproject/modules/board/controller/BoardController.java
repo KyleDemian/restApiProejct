@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,11 +47,15 @@ public class BoardController {
     @PostMapping("/boards")
     public ResponseEntity<Void> createBoard(
             // 로그인 했을경우만 글쓸 수 있도록 변경 해야함.
-//            @AuthenticationPrincipal Member member,
-                                            @RequestBody @Valid BoardCreateRequest boardCreateRequest
+            @AuthenticationPrincipal Member member
+            , @RequestBody @Valid BoardCreateRequest boardCreateRequest
             , BindingResult bindingResult) {
 
 //        log.info("멤버 객체", member);
+
+        if (member == null) {
+            throw new AccessDeniedException("사용자 로그인 이후 글 작성 가능");
+        }
 
         if (bindingResult.hasErrors()) {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();

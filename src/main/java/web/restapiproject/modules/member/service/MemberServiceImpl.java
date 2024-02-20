@@ -1,6 +1,7 @@
 package web.restapiproject.modules.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +15,10 @@ import web.restapiproject.modules.member.entity.Member;
 import web.restapiproject.modules.member.mapper.MemberMapper;
 import web.restapiproject.modules.member.repository.MemberRepository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,15 +47,26 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        Optional<Member> findOne = memberRepository.findByLoginId(loginId);
-        Member member = findOne.orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() ->
+                new UsernameNotFoundException("사용자 없음"));
 
-        return member;
-//        return User.builder()
-//                .username(member.getLoginId())
+        List<GrantedAuthority> authorities = Optional.ofNullable(member.getAuthorities())
+                .orElse(Collections.emptyList())
+                .stream()
+                .collect(Collectors.toList());
+
+        UserDetails userDetails = User.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .authorities(authorities)
+                .build();
+
+//        UserDetails userDetails = User.withUsername(member.getUsername())
 //                .password(member.getPassword())
-//                .roles("ROLE_USER")
-//                .build()
-//                ;
+//                .authorities((GrantedAuthority) member.getAuthorities().stream().map
+//                        (GrantedAuthority::getAuthority).collect(Collectors.toList()))
+//                .build();
+        // return member;
+        return userDetails;
     }
 }

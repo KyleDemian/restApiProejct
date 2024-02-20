@@ -3,11 +3,8 @@ package web.restapiproject.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
@@ -16,11 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
@@ -38,9 +34,10 @@ public class SecurityConfig {
                             .anyRequest().permitAll()
                 )
                 .httpBasic(HttpBasicConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
+                .logout(withDefaults())
         ;
 
         return http.build();
@@ -55,21 +52,10 @@ public class SecurityConfig {
                 ;
     }
 
-    private final UserDetailsService userService;
-
     @Bean
+    // 순환참조 발생하여 static으로 변경 -> memberServiceImpl
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception{
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//
-//        daoAuthenticationProvider.setUserDetailsService(userService);
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//
-//        return daoAuthenticationProvider;
-//    }
 
 }
