@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,8 +51,6 @@ public class BoardController {
             @AuthenticationPrincipal Member member
             , @RequestBody @Valid BoardCreateRequest boardCreateRequest
             , BindingResult bindingResult) {
-
-//        log.info("멤버 객체", member);
 
         if (member == null) {
             throw new AccessDeniedException("사용자 로그인 이후 글 작성 가능");
@@ -97,7 +96,6 @@ public class BoardController {
      */
     @PostMapping("/boards/{id}/comments")
     public ResponseEntity<Void> createBoardComment(@PathVariable Long id,
-
                                                    @RequestBody @Valid BoardCommentCreateRequest boardCommentCreateRequest,
                                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
