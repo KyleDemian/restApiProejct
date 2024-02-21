@@ -17,6 +17,7 @@ import web.restapiproject.modules.board.service.BoardService;
 import web.restapiproject.modules.member.entity.Member;
 
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
@@ -48,7 +49,7 @@ public class BoardController {
     @PostMapping("/boards")
     public ResponseEntity<Void> createBoard(
             // 로그인 했을경우만 글쓸 수 있도록 변경 해야함.
-            @AuthenticationPrincipal Member member
+            @AuthenticationPrincipal UserDetails member
             , @RequestBody @Valid BoardCreateRequest boardCreateRequest
             , BindingResult bindingResult) {
 
