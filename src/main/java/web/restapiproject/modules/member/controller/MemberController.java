@@ -24,7 +24,7 @@ import web.restapiproject.modules.member.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
-//    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
@@ -35,18 +35,18 @@ public class MemberController {
         boolean isAuthenticated = memberService.authenticateMember(memberDto);
 
         if (isAuthenticated) {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            memberDto.getLoginId(),
-//                            memberDto.getPassword()
-//                    )
-//            );
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            memberDto.getLoginId(),
+                            memberDto.getPassword()
+                    )
+            );
 
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-//            String jwt = tokenProvider.generateToken(authentication);
-//            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-            return ResponseEntity.ok("ok");
+            String jwt = tokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+//            return ResponseEntity.ok("ok");
         } else {
             // @ControllerAdvice를 사용해 글로벌 예외 처리
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid credentials");
