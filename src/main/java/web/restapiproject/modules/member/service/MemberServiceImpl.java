@@ -61,12 +61,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .authorities(authorities)
                 .build();
 
-//        UserDetails userDetails = User.withUsername(member.getUsername())
-//                .password(member.getPassword())
-//                .authorities((GrantedAuthority) member.getAuthorities().stream().map
-//                        (GrantedAuthority::getAuthority).collect(Collectors.toList()))
-//                .build();
-        // return member;
         return userDetails;
     }
 }

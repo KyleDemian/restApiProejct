@@ -46,7 +46,6 @@ public class MemberController {
 
             String jwt = tokenProvider.generateToken(authentication);
             return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-//            return ResponseEntity.ok("ok");
         } else {
             // @ControllerAdvice를 사용해 글로벌 예외 처리
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid credentials");
