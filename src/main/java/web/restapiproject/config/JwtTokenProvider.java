@@ -33,7 +33,13 @@ public class JwtTokenProvider {
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        Date tokenExpiryDate = extractExpiration(token);
+
+        if(tokenExpiryDate == null) {
+            return false; // 또는 비즈니스 요구에 따라 true 반환
+        }
+
+        return tokenExpiryDate.before(new Date());
     }
 
     public String generateToken(Authentication authentication) {
