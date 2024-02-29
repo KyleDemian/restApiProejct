@@ -26,5 +26,5 @@ public class Board extends BaseEntity {
     // mappedBy 가 있을경우 @JoinColumn(name = "comment_id") 사용 불가.
     @Builder.Default
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<BoardComment> boardCommentList = new ArrayList<>();
+    private List<BoardComment> comments = new ArrayList<>();
 }
