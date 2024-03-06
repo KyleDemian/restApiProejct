@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import web.restapiproject.common.URILocationBuilder;
 import web.restapiproject.modules.board.dto.*;
 import web.restapiproject.modules.board.service.BoardService;
 import web.restapiproject.modules.member.entity.Member;
@@ -103,13 +104,8 @@ public class BoardController {
             throw new IllegalArgumentException("데이터 확인 필요.");
         }
 
-//        Long createBoardId = boardService.createBoardComments(member, id ,boardCommentRequest);
         Long createBoardId = boardService.createBoardComments(id, boardCommentCreateRequest);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createBoardId)
-                .toUri();
+        URI location = URILocationBuilder.fromId(createBoardId).buildURI();
 
         return ResponseEntity.created(location).build();
     }
