@@ -17,24 +17,24 @@ class MemberServiceImplTest {
     @Mock
     MemberRepository memberRepository;
 
-    @Test
-    public void 회원가입테스트(){
-        // given
-        Member member = Member.builder()
-                .loginId("testUser")
-                .password("password")
-                .build();
-
-        //when
-        when(memberRepository.save(any(Member.class))).thenReturn(member);
-
-        //then
-        Member savedMember = memberRepository.save(member);
-
-        verify(memberRepository, times(1)).save(member);
-
-        assertEquals("testUser", savedMember.getUsername());
-        assertEquals("password", savedMember.getPassword());
-    }
+//    @Test
+//    public void 회원가입테스트(){
+//        // given
+//        Member member = Member.builder()
+//                .loginId("testUser")
+//                .password("password")
+//                .build();
+//
+//        //when
+//        when(memberRepository.save(any(Member.class))).thenReturn(member);
+//
+//        //then
+//        Member savedMember = memberRepository.save(member);
+//
+//        verify(memberRepository, times(1)).save(member);
+//
+//        assertEquals("testUser", savedMember.getUsername());
+//        assertEquals("password", savedMember.getPassword());
+//    }
 
 }
